@@ -1,10 +1,15 @@
+ZAŁOŻENIA:
+  Serwer ma na celu utrzymywać połączenie aplikacji mobilnej jak i internetowej z bazą danych i wyświetlnie aktualnych danych na obu aplikacjach.
+  Obługiwać ma operacje CRUD użytkownika oraz rozgrywek.
+  Serwer ma hashować wrażliwe dane przy transferze danych między bazą danych a klientem.
+  
 TO DO:
 - [x] postawienie serwera
 - [x] nawiązanie połączenia z MongoDB
-- [ ] stworzenie sesji logowania
+- [ ] sesja użytkownika
   - [ ] token sesji
-- [ ] zamknięcie sesji po wylogowaniu użytwkonika 
-- [ ] szyfrowanie haseł
+  - [ ] zamknięcie sesji po wylogowaniu użytwkonika 
+- [ ] szyfrowanie wrażliwych danych
 - [ ] schemat użytkownika
 - [ ] schemat rozgrywki 
 - [x] routing użytkowników
@@ -28,3 +33,12 @@ TO DO:
     - [ ] pobieranie danych
     - [ ] edycja
     - [ ] usuwania
+
+STACK TECHNOLOGICZNY:
+- Node.js + Express.js
+- MongoDB
+- mongoose
+- cors
+- dotenv
+- git bash
+- npm
