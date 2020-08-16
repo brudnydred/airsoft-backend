@@ -15,6 +15,11 @@ const gameSchema = new Schema({
     minlength: 8,
     trim: true
   },
+  gameAdmin: {
+    type: String,
+    required: true,
+    trim: true,
+  },
   teamOneName: {
     type: String,
     required: true,
