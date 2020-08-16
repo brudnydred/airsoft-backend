@@ -5,6 +5,8 @@ TO DO:
   - [ ] token sesji
 - [ ] zamknięcie sesji po wylogowaniu użytwkonika 
 - [ ] szyfrowanie haseł
+- [ ] schemat użytkownika
+- [ ] schemat rozgrywki 
 - [x] routing użytkowników
   - [x] /users/add -> POST (CREATE)
   - [x] /users -> GET (READ)
