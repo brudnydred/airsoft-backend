@@ -99,6 +99,8 @@ Serwer ma hashować wrażliwe dane przy transferze danych między bazą danych a
 ### UWAGI
 Dla lepszego działania API zaleca się przechowywanie niewrażliwych danych w pamięci cache urządzenia lub przeglądarki.
 
+`id` przekazywane jest jako właściwość `params` żądania, pozostałe dane przekazywane są jako właściwości `body`
+
 ### STACK TECHNOLOGICZNY:
 - Node.js + Express.js
 - MongoDB
