@@ -11,7 +11,19 @@ router.get('/', async (req, res) => {
   }
 })
 
-router.post('/add', async (req, res) => {
+router.get('/:id', async (req, res) => {
+  const { id } = req.params
+
+  try {
+    const users = await User.find({ _id: id})
+
+    res.json(users)
+  } catch (err) {
+    res.json(`Error: ${err}`)
+  }
+})
+
+router.post('/', async (req, res) => {
   const { username, password, email } = req.body
 
   try {
@@ -42,7 +54,7 @@ router.post('/add', async (req, res) => {
   }
 })
 
-router.delete('/delete/:id', async (req, res) => {
+router.delete('/:id', async (req, res) => {
   const { id } = req.params
 
   try {
@@ -53,7 +65,7 @@ router.delete('/delete/:id', async (req, res) => {
   }
 })
 
-router.put('/update/:id', async (req, res) => {
+router.put('/:id', async (req, res) => {
   const { username, password, email } = req.body
   const { id } = req.params
 
@@ -71,7 +83,7 @@ router.put('/update/:id', async (req, res) => {
   }
 })
 
-router.put('/logout/:id', async (req, res) => {
+router.put('/:id/logout', async (req, res) => {
   const { id } = req.params
 
   try {
@@ -86,9 +98,8 @@ router.put('/logout/:id', async (req, res) => {
   }
 })
 
-router.put('/add_friend/:id', async (req, res) => {
-  const { id } = req.params
-  const { friendUsername } = req.body
+router.put('/:id/friend/:friend_username', async (req, res) => {
+  const { id, friend_username: friendUsername } = req.params
 
   try {
     const { friends } = await User.findOne({ _id: id }, 'friends -_id')
@@ -130,9 +141,8 @@ router.put('/add_friend/:id', async (req, res) => {
   }
 })
 
-router.put('/remove_friend/:id', async (req, res) => {
-  const { id } = req.params
-  const { friendUsername } = req.body
+router.delete('/:id/friend/:friend_username', async (req, res) => {
+  const { id, friend_username: friendUsername } = req.params
 
   try {
     const { _id: friendId } = await User.findOne({ username: friendUsername }, '_id')
