@@ -1,19 +1,15 @@
 ### ZAŁOŻENIA:
 
-  Serwer ma na celu utrzymywać połączenie aplikacji mobilnej jak i internetowej z bazą danych i wyświetlnie aktualnych danych na obu aplikacjach.
-
-  Obługiwać ma operacje CRUD użytkownika oraz rozgrywek.
-
-  Serwer ma hashować wrażliwe dane przy transferze danych między bazą danych a klientem.
+Serwer ma na celu utrzymywać połączenie aplikacji mobilnej jak i internetowej z bazą danych i wyświetlnie aktualnych danych na obu aplikacjach.
+Obługiwać ma operacje CRUD użytkownika oraz rozgrywek.
+Serwer ma hashować wrażliwe dane przy transferze danych między bazą danych a klientem.
   
 ### TO DO:
 - [x] postawienie serwera
 - [x] nawiązanie połączenia z MongoDB
-- [ ] sesja użytkownika
-  - [ ] token sesji
 - [ ] szyfrowanie wrażliwych danych
-- [ ] schemat użytkownika
-- [ ] schemat rozgrywki 
+- [x] schemat użytkownika
+- [x] schemat rozgrywki 
 - [x] routing użytkowników (/users)
   - [x] / -> GET (READ)
   - [x] /add -> POST (CREATE)
@@ -34,12 +30,61 @@
   
 ### POMOC: 
 
-  API działa pod adresem http://asg-paintball-api.herokuapp.com.
+  API działa pod adresem `http://asg-paintball-api.herokuapp.com`
 
-  Przykładowe pobranie danych o użytkownikach:
+  **Pobieranie informacji o wszystkich użytkownikach** 
+  `Metoda GET`
   ```
   http://asg-paintball-api.herokuapp.com/users
   ```
+
+  **Tworzenie nowego konta**
+  `Metoda POST`
+  ```
+  http://asg-paintball-api.herokuapp.com/users/add
+  ```
+
+  **Usuwanie konta użytkownika**
+  `Metoda DELETE`
+  ```
+  http://asg-paintball-api.herokuapp.com/users/delete/:id
+  ```
+  Wymagane w żądaniu jest przekazanie `id` użytkownika.
+
+
+  **Edycja danych użytkownika**
+  `Metoda PUT`
+  ```
+  http://asg-paintball-api.herokuapp.com/users/update/:id
+  ```
+  Wymagane w żądaniu jest przekazanie `id` użytkownika.
+  Wymagane w żądaniu jest przekazanie `username`, `password`, `email`.
+
+  **Dodawanie znajomego**
+  `Metoda PUT`
+  ```
+  http://asg-paintball-api.herokuapp.com/users/add_friend/:id
+  ```
+  Wymagane w żądaniu jest przekazanie `id` użytkownika.
+  Wymagane w żądaniu jest przekazanie `friendUsername`.
+
+  **Dodawanie znajomego**
+  `Metoda PUT`
+  ```
+  http://asg-paintball-api.herokuapp.com/users/remove_friend/:id
+  ```
+  Wymagane w żądaniu jest przekazanie `id` użytkownika.
+  Wymagane w żądaniu jest przekazanie `friendUsername`.
+
+  **Wylogowanie _(zmiana czasu ostatniej aktywności)_**
+  `Metoda PUT`
+  ```
+  http://asg-paintball-api.herokuapp.com/users/logout/:id
+  ```
+  Wymagane w żądaniu jest przekazanie `id` użytkownika.
+
+### UWAGI
+Dla lepszego działania API zaleca się przechowywanie niewrażliwych danych w pamięci cache urządzenia lub przeglądarki.
 
 ### STACK TECHNOLOGICZNY:
 - Node.js + Express.js
