@@ -41,27 +41,34 @@ Serwer ma hashować wrażliwe dane przy transferze danych między bazą danych a
   http://asg-paintball-api.herokuapp.com/users
   ```
 
-  **Tworzenie nowego konta**
+  **Pobieranie informacji o konkretnym użytkowniku**
+
+  `Metoda GET`
+  ```
+  http://asg-paintball-api.herokuapp.com/users/:id
+  ```
+  Wymagane w żądaniu jest przekazanie `id` użytkownika.
+  
+  **Tworzenie nowego konta użytkownika**
 
   `Metoda POST`
   ```
-  http://asg-paintball-api.herokuapp.com/users/add
+  http://asg-paintball-api.herokuapp.com/users
   ```
 
   **Usuwanie konta użytkownika**
 
   `Metoda DELETE`
   ```
-  http://asg-paintball-api.herokuapp.com/users/delete/:id
+  http://asg-paintball-api.herokuapp.com/users/:id
   ```
   Wymagane w żądaniu jest przekazanie `id` użytkownika.
-
 
   **Edycja danych użytkownika**
 
   `Metoda PUT`
   ```
-  http://asg-paintball-api.herokuapp.com/users/update/:id
+  http://asg-paintball-api.herokuapp.com/users/:id
   ```
   Wymagane w żądaniu jest przekazanie `id` użytkownika.
 
@@ -71,27 +78,23 @@ Serwer ma hashować wrażliwe dane przy transferze danych między bazą danych a
 
   `Metoda PUT`
   ```
-  http://asg-paintball-api.herokuapp.com/users/add_friend/:id
+  http://asg-paintball-api.herokuapp.com/users/:id/friend/:friend_username
   ```
-  Wymagane w żądaniu jest przekazanie `id` użytkownika.
-
-  Wymagane w żądaniu jest przekazanie `friendUsername`.
+  Wymagane w żądaniu jest przekazanie `id` użytkownika oraz `friend_username`.
 
   **Usuwanie znajomego**
 
-  `Metoda PUT`
+  `Metoda DELETE`
   ```
-  http://asg-paintball-api.herokuapp.com/users/remove_friend/:id
+  http://asg-paintball-api.herokuapp.com/users/:id/friend/:friend_username
   ```
-  Wymagane w żądaniu jest przekazanie `id` użytkownika.
-
-  Wymagane w żądaniu jest przekazanie `friendUsername`.
+  Wymagane w żądaniu jest przekazanie `id` użytkownika oraz `friend_username`.
 
   **Wylogowanie _(zmiana czasu ostatniej aktywności)_**
 
   `Metoda PUT`
   ```
-  http://asg-paintball-api.herokuapp.com/users/logout/:id
+  http://asg-paintball-api.herokuapp.com/users/:id/logout
   ```
   
   Wymagane w żądaniu jest przekazanie `id` użytkownika.
@@ -99,7 +102,7 @@ Serwer ma hashować wrażliwe dane przy transferze danych między bazą danych a
 ### UWAGI
 Dla lepszego działania API zaleca się przechowywanie niewrażliwych danych w pamięci cache urządzenia lub przeglądarki.
 
-`id` przekazywane jest jako właściwość `params` żądania, pozostałe dane przekazywane są jako właściwości `body`
+`id` oraz `friend_username` przekazywane są jako właściwości `params` żądania, pozostałe dane przekazywane są jako właściwości `body`
 
 ### STACK TECHNOLOGICZNY:
 - Node.js + Express.js
