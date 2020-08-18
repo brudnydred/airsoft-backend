@@ -1,4 +1,4 @@
-##ZAŁOŻENIA:
+### ZAŁOŻENIA:
 
   Serwer ma na celu utrzymywać połączenie aplikacji mobilnej jak i internetowej z bazą danych i wyświetlnie aktualnych danych na obu aplikacjach.
 
@@ -6,7 +6,7 @@
 
   Serwer ma hashować wrażliwe dane przy transferze danych między bazą danych a klientem.
   
-##TO DO:
+### TO DO:
 - [x] postawienie serwera
 - [x] nawiązanie połączenia z MongoDB
 - [ ] sesja użytkownika
@@ -32,7 +32,7 @@
   - [x] /delete/:id -> DELETE (DELETE)
   - [x] /update/:id - PUT (UPDATE)
   
-##POMOC: 
+### POMOC: 
 
   API działa pod adresem http://asg-paintball-api.herokuapp.com.
 
@@ -41,7 +41,7 @@
   http://asg-paintball-api.herokuapp.com/users
   ```
 
-##STACK TECHNOLOGICZNY:
+### STACK TECHNOLOGICZNY:
 - Node.js + Express.js
 - MongoDB
 - mongoose
