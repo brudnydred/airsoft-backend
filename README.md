@@ -77,7 +77,7 @@ Serwer ma hashować wrażliwe dane przy transferze danych między bazą danych a
 
   Wymagane w żądaniu jest przekazanie `friendUsername`.
 
-  **Dodawanie znajomego**
+  **Usuwanie znajomego**
 
   `Metoda PUT`
   ```
