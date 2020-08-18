@@ -37,8 +37,8 @@ router.post('/add', async (req, res) => {
         res.json(`Error: ${err}`)
       }
     }
-  } catch (error) {
-    
+  } catch (err) {
+    res.json(`Error: ${err}`)
   }
 })
 
