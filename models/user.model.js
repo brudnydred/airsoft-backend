@@ -24,12 +24,10 @@ const userSchema = new Schema({
   createdAt: {
     type: Date,
     required: true,
-    default: Date.now
   },
   lastActiveAt: {
     type: Date,
     required: true,
-    default: Date.now
   },
   gameHistory: {
     type: Array,
@@ -42,6 +40,6 @@ const userSchema = new Schema({
   }
 })
 
-const User = mongoose.model('User', userSchema)
+const User = mongoose.model('User', userSchema, 'users')
 
 module.exports = User

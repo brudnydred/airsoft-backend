@@ -47,7 +47,6 @@ const gameSchema = new Schema({
   createdAt: {
     type: Date,
     required: true,
-    default: Date.now
   },
   gameTime: {
     type: Date,
@@ -60,6 +59,6 @@ const gameSchema = new Schema({
   }
 })
 
-const Game = mongoose.model('Game', gameSchema)
+const Game = mongoose.model('Game', gameSchema, 'games')
 
 module.exports = Game
