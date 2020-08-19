@@ -48,8 +48,16 @@ Serwer ma hashować wrażliwe dane przy transferze danych między bazą danych a
   http://asg-paintball-api.herokuapp.com/users/:id
   ```
   Wymagane w żądaniu jest przekazanie `id` użytkownika.
+
+  **Logowanie**
+
+  `Metoda POST`
+  ```
+  http://asg-paintball-api.herokuapp.com/signin
+  ```
+  Wymagane w żądaniu jest przekazanie `username`, `password`.
   
-  **Tworzenie nowego konta użytkownika**
+  **Rejestracja**
 
   `Metoda POST`
   ```
