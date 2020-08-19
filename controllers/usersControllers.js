@@ -1,6 +1,5 @@
 const User = require('./../models/user.model')
 const bcrypt = require('bcrypt')
-const e = require('express')
 
 const BCRYPT_SALT_ROUNDS = 12
 
@@ -89,7 +88,14 @@ module.exports = {
     }
 
     try {
-      await User.deleteOne({ _id: id })
+      const { friends } = await User.findOneAndDelete({ _id: id })
+
+      await User.updateMany({ _id: { $in: friends }}, {
+        $pull: {
+          friends: id
+        }
+      })
+      
       res.json('User deleted')
     } catch (err) {
       res.json(`Error: ${err}`)
