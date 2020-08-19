@@ -1,169 +1,22 @@
 const router = require('express').Router()
-const User = require('./../models/user.model')
+const usersController = require('./../controllers/usersControllers')
 
-router.get('/', async (req, res) => {
-  try {
-    const users = await User.find()
+router.get('/', usersController.findAll)
 
-    res.json(users)
-  } catch (err) {
-    res.json(`Error: ${err}`)
-  }
-})
+router.get('/:id', usersController.findOne)
 
-router.get('/:id', async (req, res) => {
-  const { id } = req.params
+router.post('/signup', usersController.signUp)
 
-  try {
-    const users = await User.find({ _id: id})
+router.post('/signin', usersController.signIn)
 
-    res.json(users)
-  } catch (err) {
-    res.json(`Error: ${err}`)
-  }
-})
+router.delete('/:id', usersController.delete)
 
-router.post('/', async (req, res) => {
-  const { username, password, email } = req.body
+router.put('/:id', usersController.update)
 
-  try {
-    if ((await User.find({ username: username })).length || (await User.find({ email: email })).length) {
-      res.json('This username or email is taken.')
-    } else {
-      const currentDate = new Date()
-      const createdAt = currentDate
-      const lastActiveAt = currentDate
+router.put('/:id/logout', usersController.logout)
 
-      const newUser = new User({
-        username,
-        password,
-        email,
-        createdAt,
-        lastActiveAt,
-      })
-    
-      try {
-        await newUser.save()
-        res.json('User added')
-      } catch (err) {
-        res.json(`Error: ${err}`)
-      }
-    }
-  } catch (err) {
-    res.json(`Error: ${err}`)
-  }
-})
+router.put('/:id/friend', usersController.addFriend)
 
-router.delete('/:id', async (req, res) => {
-  const { id } = req.params
-
-  try {
-    await User.deleteOne({ _id: id })
-    res.json('User deleted')
-  } catch (err) {
-    res.json(`Error: ${err}`)
-  }
-})
-
-router.put('/:id', async (req, res) => {
-  const { username, password, email } = req.body
-  const { id } = req.params
-
-  try {
-    await User.updateOne({ _id: id }, {
-      $set: {
-        username: username,
-        password: password,
-        email: email
-      }
-    })
-    res.json('User updated')
-  } catch (err) {
-    res.json(`Error: ${err}`)    
-  }
-})
-
-router.put('/:id/logout', async (req, res) => {
-  const { id } = req.params
-
-  try {
-    await User.updateOne({ _id: id }, {
-      $set: {
-        lastActiveAt: new Date()
-      }
-    })
-    res.json('User logged out')
-  } catch (err) {
-    res.json(`Error: ${err}`)    
-  }
-})
-
-router.put('/:id/friend/:friend_username', async (req, res) => {
-  const { id, friend_username: friendUsername } = req.params
-
-  try {
-    const { friends } = await User.findOne({ _id: id }, 'friends -_id')
-
-    if (friends.some(friend => friend === friendUsername)) {
-      res.json(`${friendUsername} is already your friend`)
-    } else {
-      try {
-        const friendData = await User.findOne({ username: friendUsername }, '_id')
-        const userData = await User.findOne({ _id: id }, 'username -_id')
-
-        if (friendData?._id) {
-          try {
-            await User.updateOne({ _id: id }, {
-              $push: {
-                friends: friendUsername
-              }
-            })
-
-            await User.updateOne({ _id: friendData._id }, {
-              $push: {
-                friends: userData.username
-              }
-            })
-
-            res.json('Friend added')
-          } catch (err) {
-            res.json(`Error: ${err}`)
-          }
-        } else {
-          res.json('User not found')
-        }
-      } catch (err) {
-        res.json(`Error: ${err}`)  
-      }
-    }
-  } catch (err) {
-    res.json(`Error: ${err}`)
-  }
-})
-
-router.delete('/:id/friend/:friend_username', async (req, res) => {
-  const { id, friend_username: friendUsername } = req.params
-
-  try {
-    const { _id: friendId } = await User.findOne({ username: friendUsername }, '_id')
-    const { username: userUsername } = await User.findOne({ _id: id }, 'username -_id')
-
-    await User.updateOne({ _id: id }, {
-      $pull: {
-        friends: friendUsername
-      }
-    })
-
-    await User.updateOne({ _id: friendId }, {
-      $pull: {
-        friends: userUsername
-      }
-    })
-
-    res.json('Friend removed')
-  } catch (err) {
-    res.json(`Error: ${err}`)
-  }
-})
+router.delete('/:id/friend', usersController.removeFriend)
 
 module.exports = router
