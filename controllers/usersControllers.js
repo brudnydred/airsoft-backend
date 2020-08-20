@@ -8,9 +8,9 @@ module.exports = {
     try {
       const users = await User.find()
   
-      res.json(users)
+      res.status(200).json(users)
     } catch (err) {
-      res.json(`Error: ${err}`)
+      res.status(400).json(`Error: ${err}`)
     }
   },
 
@@ -18,16 +18,16 @@ module.exports = {
     const { id } = req.params
 
     try {
-      const users = await User.find({ _id: id})
+      const user = await User.find({ _id: id})
   
-      if (!users.length) {
-        res.json('There is no user with that id')
+      if (!user.length) {
+        res.status(400).json('There is no user with that id')
         next()
       }
 
-      res.json(users)
+      res.status(200).json(user)
     } catch (err) {
-      res.json(`Error: ${err}`)
+      res.status(400).json(`Error: ${err}`)
     }
   }, 
 
@@ -36,7 +36,7 @@ module.exports = {
 
     try {
       if ((await User.find({ username: username })).length || (await User.find({ email: email })).length) {
-        res.json('This username or email is taken.')
+        res.status(400).json('This username or email is taken.')
       } else {
         const currentDate = new Date()
         const createdAt = currentDate
@@ -54,13 +54,13 @@ module.exports = {
       
         try {
           await newUser.save()
-          res.json('User added')
+          res.status(200).json('User added')
         } catch (err) {
-          res.json(`Error: ${err}`)
+          res.status(400).json(`Error: ${err}`)
         }
       }
     } catch (err) {
-      res.json(`Error: ${err}`)
+      res.status(400).json(`Error: ${err}`)
     }
   },
 
@@ -70,12 +70,12 @@ module.exports = {
     try {
       const { password: hashedPassword } = await User.findOne({ username: username }, 'password -_id')
       if (await bcrypt.compare(password.toString(), hashedPassword.toString())) {
-        res.json('Logged in')
+        res.status(200).json('Logged in')
       } else {
-        res.json(`Wrong username or password`)
+        res.status(400).json(`Wrong username or password`)
       }
     } catch (err) {
-      res.json('Wrong username or password')
+      res.status(400).json('Wrong username or password')
     }
   },
 
@@ -83,7 +83,7 @@ module.exports = {
     const { id } = req.params
   
     if (!id) {
-      res.json('There is no id')
+      res.status(400).json('There is no id')
       return next()
     }
 
@@ -96,9 +96,9 @@ module.exports = {
         }
       })
       
-      res.json('User deleted')
+      res.status(200).json('User deleted')
     } catch (err) {
-      res.json(`Error: ${err}`)
+      res.status(400).json(`Error: ${err}`)
     }
   },
 
@@ -107,12 +107,12 @@ module.exports = {
     const { id } = req.params
   
     if (!username || !password || !email) {
-      res.json('There is no username or password or email')
+      res.status(400).json('There is no username or password or email')
       return next()
     }
 
     if (!id) {
-      res.json('There is no id')
+      res.status(400).json('There is no id')
       return next()
     }
 
@@ -126,9 +126,9 @@ module.exports = {
           email: email
         }
       })
-      res.json('User updated')
+      res.status(200).json('User updated')
     } catch (err) {
-      res.json(`Error: ${err}`)    
+      res.status(400).json(`Error: ${err}`)    
     }
   },
 
@@ -141,9 +141,9 @@ module.exports = {
           lastActiveAt: new Date()
         }
       })
-      res.json('User logged out')
+      res.status(200).json('User logged out')
     } catch (err) {
-      res.json(`Error: ${err}`)    
+      res.status(400).json(`Error: ${err}`)    
     }
   },
 
@@ -160,19 +160,19 @@ module.exports = {
       }
 
       if (friendData === null) {
-        res.json('User not found')
+        res.status(400).json('User not found')
         return next()
       }
 
       if (id.toString() === friendData._id.toString()) {
-        res.json('You cannot add yourself as friends')
+        res.status(400).json('You cannot add yourself as friends')
         return next()
       }
 
       const { friends } = await User.findOne({ _id: id }, 'friends -_id')
 
       if (friends.some(friend => friend.toString() === friendData._id.toString())) {
-        res.json(`${friendData.username} is already your friend`)
+        res.status(400).json(`${friendData.username} is already your friend`)
         return next()
       }
 
@@ -188,9 +188,9 @@ module.exports = {
         }
       })
 
-      res.json('Friend added!')
+      res.status(200).json('Friend added!')
     } catch (err) {
-      res.json(`Error: ${err}`)
+      res.status(400).json(`Error: ${err}`)
     }
   },
 
@@ -199,7 +199,7 @@ module.exports = {
     const { friendId } = req.body
 
     if (!friendId) {
-      res.json('There is friend id')
+      res.status(400).json('There is no friend id')
       return next()
     }
 
@@ -216,9 +216,9 @@ module.exports = {
         }
       })
   
-      res.json('Friend removed')
+      res.status(200).json('Friend removed')
     } catch (err) {
-      res.json(`Error: ${err}`)
+      res.status(400).json(`Error: ${err}`)
     }
   }
 }
