@@ -30,13 +30,13 @@ const userSchema = new Schema({
     required: true,
   },
   gameHistory: {
-    type: Array,
+    type: [],
   }, 
   stats: {
-    type: Array,
+    type: [],
   },
   friends: {
-    type: Array
+    type: []
   }
 })
 
