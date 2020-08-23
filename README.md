@@ -53,7 +53,7 @@ Serwer ma hashować wrażliwe dane przy transferze danych między bazą danych a
 
   `Metoda POST`
   ```
-  http://asg-paintball-api.herokuapp.com/signin
+  http://asg-paintball-api.herokuapp.com/users/signin
   ```
   Wymagane w żądaniu jest przekazanie `username`, `password`.
   
@@ -61,7 +61,7 @@ Serwer ma hashować wrażliwe dane przy transferze danych między bazą danych a
 
   `Metoda POST`
   ```
-  http://asg-paintball-api.herokuapp.com/signup
+  http://asg-paintball-api.herokuapp.com/users/signup
   ```
   Wymagane w żądaniu jest przekazanie `username`, `password`, `email`.
 

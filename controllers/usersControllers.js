@@ -1,5 +1,6 @@
 const User = require('./../models/user.model')
 const bcrypt = require('bcrypt')
+const { Error } = require('mongoose')
 
 const BCRYPT_SALT_ROUNDS = 12
 
@@ -64,16 +65,17 @@ module.exports = {
     }
   },
 
-  signIn: async (req, res) => {
+  signIn: async (req, res, next) => {
     const { username, password } = req.body
 
     try {
       const { password: hashedPassword } = await User.findOne({ username: username }, 'password -_id')
-      if (await bcrypt.compare(password.toString(), hashedPassword.toString())) {
-        res.status(200).json('Logged in')
-      } else {
-        res.status(400).json(`Wrong username or password`)
+      
+      if (!await bcrypt.compare(password.toString(), hashedPassword.toString())) {
+        res.status(400).json('Wrong username or password')
+        return next()
       }
+      res.status(200).json('Logged in')
     } catch (err) {
       res.status(400).json('Wrong username or password')
     }
