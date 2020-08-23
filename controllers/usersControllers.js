@@ -1,6 +1,5 @@
 const User = require('./../models/user.model')
 const bcrypt = require('bcrypt')
-const { Error } = require('mongoose')
 
 const BCRYPT_SALT_ROUNDS = 12
 
