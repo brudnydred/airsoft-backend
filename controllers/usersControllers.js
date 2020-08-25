@@ -67,8 +67,9 @@ module.exports = {
   signIn: async (req, res, next) => {
     const { username, password } = req.body
 
-    console.log(req.body)
-    console.log(username, password)
+    console.log(`req: ${req}`)
+    console.log(`req.body: ${req.body}`)
+    console.log(`user/pass: ${username} / ${password}`)
 
     try {
       const { password: hashedPassword } = await User.findOne({ username: username }, 'password -_id')
