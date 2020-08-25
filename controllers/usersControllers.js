@@ -73,12 +73,12 @@ module.exports = {
       const { password: hashedPassword } = await User.findOne({ username: username }, 'password -_id')
       
       if (!await bcrypt.compare(password.toString(), hashedPassword.toString())) {
-        res.status(400).json('no')
+        res.status(400).json(false)
         return next()
       }
-      res.status(200).json('yes')
+      res.status(200).json(true)
     } catch (err) {
-      res.status(400).json('no')
+      res.status(400).json(false)
     }
   },
 
