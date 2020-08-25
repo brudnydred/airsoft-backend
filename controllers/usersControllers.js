@@ -67,6 +67,7 @@ module.exports = {
   signIn: async (req, res, next) => {
     const { username, password } = req.body
 
+    console.log(req.body)
     console.log(username, password)
 
     try {
