@@ -73,12 +73,12 @@ module.exports = {
       const { password: hashedPassword } = await User.findOne({ username: username }, 'password -_id')
       
       if (!await bcrypt.compare(password.toString(), hashedPassword.toString())) {
-        res.status(400).json('Wrong username or password')
+        res.status(400).json({ response: 'no' })
         return next()
       }
-      res.status(200).json('Logged in')
+      res.status(200).json({ response: 'yes' })
     } catch (err) {
-      res.status(400).json('Wrong username or password')
+      res.status(400).json({ response: 'no' })
     }
   },
 
