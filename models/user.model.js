@@ -20,14 +20,17 @@ const userSchema = new Schema({
     type: String,
     required: true,
     trim: true,
+    unique: true,
   },
   createdAt: {
     type: Date,
     required: true,
+    default: Date.now
   },
   lastActiveAt: {
     type: Date,
     required: true,
+    default: Date.now
   },
   gameHistory: {
     type: [],

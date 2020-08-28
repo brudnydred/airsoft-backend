@@ -1,6 +1,8 @@
 const express = require('express')
 const cors = require('cors')
+const cookieParser = require('cookie-parser')
 const mongoose = require('mongoose')
+const jwt = require('jsonwebtoken')
 const path = require('path')
 
 require('dotenv').config()
@@ -11,10 +13,15 @@ const PORT = process.env.PORT || 5000
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*")
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+  res.header('Access-Control-Expose-Headers', 'auth-token')
   next()
 })
 
-app.use(cors())
+app.use(cookieParser())
+app.use(cors({
+  credentials: true,
+  origin: 'http://localhost:3000'
+}))
 app.use(express.json())
 
 const MONGODB_URI = process.env.MONGODB_URI
@@ -28,11 +35,11 @@ connection.once('open', () => {
 
 const usersRouter = require('./routes/users')
 const gamesRouter = require('./routes/games')
-const testRouter = require('./routes/test')
+// const testRouter = require('./routes/test')
 
 app.use('/users', usersRouter)
 app.use('/games', gamesRouter)
-app.use('/test', testRouter)
+// app.use('/test', testRouter)
 
 app.listen(PORT, () => {
   console.log(`Server is running on port: ${PORT}`)

@@ -1,5 +1,6 @@
 const User = require('./../models/user.model')
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 
 const BCRYPT_SALT_ROUNDS = 12
 
@@ -34,51 +35,66 @@ module.exports = {
   signUp: async (req, res) => {
     const { username, password, email } = req.body
 
+    if (password.length === 0) {
+      return res.status(400).json({ success: false, message: 'Password is required.' })
+    }
+
     try {
-      if ((await User.find({ username: username })).length || (await User.find({ email: email })).length) {
-        res.status(400).json('This username or email is taken.')
-      } else {
-        const currentDate = new Date()
-        const createdAt = currentDate
-        const lastActiveAt = currentDate
+      const hashedPassword = await bcrypt.hash(password, BCRYPT_SALT_ROUNDS)
   
-        const hashedPassword = await bcrypt.hash(password, BCRYPT_SALT_ROUNDS)
-  
-        const newUser = new User({
-          username,
-          password: hashedPassword,
-          email,
-          createdAt,
-          lastActiveAt,
-        })
+      const newUser = new User({
+        username,
+        password: hashedPassword,
+        email,
+      })
       
-        try {
-          await newUser.save()
-          res.status(200).json('User added')
-        } catch (err) {
-          res.status(400).json(`Error: ${err}`)
-        }
-      }
+      await newUser.save()
+      res.status(200).json('User added')
     } catch (err) {
-      res.status(400).json(`Error: ${err}`)
+      if (err.name === 'MongoError' && err.code === 11000)  {
+        return res.status(400).json({ success: false, message: "Username or Email is taken."})
+      }
+
+      if (err.errors.username?.kind === 'required') {
+        return res.status(400).json({ success: false, message: "Username is required."})
+      }
+  
+      if (err.errors.username?.kind === 'minlength') {
+        return res.status(400).json({ success: false, message: "Username is too short."})
+      }
+      
+      if (err.errors.email?.kind === 'required') {
+        return res.status(400).json({ success: false, message: "Email is required."})
+      }
+      
+      res.status(400).json({ success: false, message: `Unhandled error: ${err}`})
     }
   },
 
   signIn: async (req, res, next) => {
     const { username, password } = req.body
 
-    console.log(`user/pass: ${username} / ${password}`)
+    if (!username.length) {
+      return res.status(400).json({ success: false, message: "Username is required."})
+    }
 
     try {
-      const { password: hashedPassword } = await User.findOne({ username: username }, 'password -_id')
+      const user = await User.findOne({ username: username })
       
-      if (!await bcrypt.compare(password.toString(), hashedPassword.toString())) {
-        res.status(400).json(false)
+      if (user === null) {
+        return res.status(400).json({ success: false, message: 'User not found.'})
+      }
+
+      if (!await bcrypt.compare(password.toString(), user.password.toString())) {
+        res.status(400).json({ success: false, message: "Invalid password"})
         return next()
       }
-      res.status(200).json(true)
+
+      const token = jwt.sign({ _id: user._id, username: user.username }, process.env.ACCESS_TOKEN_SECRET)
+      res.header('auth-token', token)
+      res.status(200).json({ success: true, message: 'Logged in' })
     } catch (err) {
-      res.status(400).json(false)
+      res.status(400).json(err)
     }
   },
 
@@ -135,7 +151,7 @@ module.exports = {
     }
   },
 
-  logout: async (req, res) => {
+  signOut: async (req, res) => {
     const { id } = req.params
   
     try {

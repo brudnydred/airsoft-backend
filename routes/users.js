@@ -1,7 +1,8 @@
 const router = require('express').Router()
 const usersController = require('./../controllers/usersControllers')
+const verifyToken = require('./../middlewares/verifyToken')
 
-router.get('/', usersController.findAll)
+router.get('/', verifyToken, usersController.findAll)
 
 router.get('/:id', usersController.findOne)
 
@@ -9,11 +10,11 @@ router.post('/signup', usersController.signUp)
 
 router.post('/signin', usersController.signIn)
 
+router.put('/:id/signout', usersController.signOut)
+
 router.delete('/:id', usersController.delete)
 
 router.put('/:id', usersController.update)
-
-router.put('/:id/logout', usersController.logout)
 
 router.put('/:id/friend', usersController.addFriend)
 
