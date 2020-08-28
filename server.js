@@ -18,10 +18,7 @@ app.use((req, res, next) => {
 })
 
 app.use(cookieParser())
-app.use(cors({
-  credentials: true,
-  origin: 'http://localhost:3000'
-}))
+app.use(cors())
 app.use(express.json())
 
 const MONGODB_URI = process.env.MONGODB_URI
