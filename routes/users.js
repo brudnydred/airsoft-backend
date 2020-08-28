@@ -4,20 +4,20 @@ const verifyToken = require('./../middlewares/verifyToken')
 
 router.get('/', verifyToken, usersController.findAll)
 
-router.get('/:id', usersController.findOne)
+router.get('/:id', verifyToken, usersController.findOne)
 
 router.post('/signup', usersController.signUp)
 
 router.post('/signin', usersController.signIn)
 
-router.put('/:id/signout', usersController.signOut)
+router.put('/:id/signout', verifyToken, usersController.signOut)
 
-router.delete('/:id', usersController.delete)
+router.delete('/:id', verifyToken, usersController.delete)
 
-router.put('/:id', usersController.update)
+router.put('/:id', verifyToken, usersController.update)
 
-router.put('/:id/friend', usersController.addFriend)
+router.put('/:id/friend', verifyToken, usersController.addFriend)
 
-router.delete('/:id/friend', usersController.removeFriend)
+router.delete('/:id/friend', verifyToken, usersController.removeFriend)
 
 module.exports = router
