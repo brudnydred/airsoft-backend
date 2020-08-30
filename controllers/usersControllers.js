@@ -98,6 +98,21 @@ module.exports = {
     }
   },
 
+  signOut: async (req, res) => {
+    const { id } = req.params
+
+    try {
+      await User.updateOne({ _id: id }, {
+        $set: {
+          lastActiveAt: new Date()
+        }
+      })
+      res.status(200).json('User logged out')
+    } catch (err) {
+      res.status(400).json(`Error: ${err}`)    
+    }
+  },
+
   delete: async (req, res, next) => {
     const { id } = req.params
   
@@ -146,21 +161,6 @@ module.exports = {
         }
       })
       res.status(200).json('User updated')
-    } catch (err) {
-      res.status(400).json(`Error: ${err}`)    
-    }
-  },
-
-  signOut: async (req, res) => {
-    const { id } = req.params
-  
-    try {
-      await User.updateOne({ _id: id }, {
-        $set: {
-          lastActiveAt: new Date()
-        }
-      })
-      res.status(200).json('User logged out')
     } catch (err) {
       res.status(400).json(`Error: ${err}`)    
     }
