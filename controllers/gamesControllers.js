@@ -136,8 +136,6 @@ module.exports = {
     const { gameId, gameTime, teamRedScores, teamBlueScores } = req.body
 
     try {
-      const { gameCode } = await Game.findOne({ _id: gameId }, 'gameCode -_id')
-
       await Game.updateOne({ _id: gameId }, {
         $set: {
           isRunning: false,
