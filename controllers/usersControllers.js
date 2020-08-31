@@ -109,8 +109,11 @@ module.exports = {
           lastActiveAt: new Date()
         }
       })
+      console.log(`logged out`)
+
       res.status(200).json('User logged out')
     } catch (err) {
+      console.log(`Error: ${err}`)
       res.status(400).json(`Error: ${err}`)    
     }
   },
