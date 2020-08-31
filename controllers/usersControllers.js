@@ -101,6 +101,8 @@ module.exports = {
   signOut: async (req, res) => {
     const { id } = req.params
 
+    console.log(`id: ${id}`)
+
     try {
       await User.updateOne({ _id: id }, {
         $set: {
