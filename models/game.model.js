@@ -3,59 +3,64 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const gameSchema = new Schema({
-  gameName: {
+  gameCode: {
     type: String,
     required: true,
-    minlength: 3,
-    trim: true
+    unique: true
   },
   gamePassword: {
     type: String,
-    required: true,
-    minlength: 8,
     trim: true
   },
-  gameAdmin: {
-    type: String,
-    required: true,
-    trim: true,
+  teamBlue: {
+    type: []
   },
-  teamOneName: {
-    type: String,
-    required: true,
-    minlength: 3,
-    trim: true,
+  teamRed: {
+    type: []
   },
-  teamTwoName: {
-    type: String,
-    required: true,
-    minlength: 3,
-    trim: true,
-  },
-  teamOneScores: {
+  teamBlueScores: {
     type: Number,
-    required: true
+    required: true,
+    default: 0
   },
-  teamTwoScores: {
+  teamRedScores: {
     type: Number,
-    required: true
+    required: true,
+    default: 0
   },
   winner: {
     type: String,
-    required: true
   },
   createdAt: {
     type: Date,
     required: true,
+    default: Date.now
   },
   gameTime: {
-    type: Date,
-    required: true
+    type: Number,
+    required: true,
+    default: 0
   },
   isRunning: {
     type: Boolean,
     required: true,
     default: false
+  },
+  isFinished: {
+    type: Boolean,
+    required: true,
+    default: false
+  },
+  location: {
+    type: String,
+    required: true
+  },
+  numberOfPlayers: {
+    type: Number,
+    default: 0
+  },
+  playersIds: {
+    type: [],
   }
 })
 

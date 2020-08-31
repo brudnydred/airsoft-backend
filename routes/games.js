@@ -1,22 +1,16 @@
 const router = require('express').Router()
-const Game = require('./../models/game.model')
+const gamesController = require('./../controllers/gamesControllers')
 
-router.get('/', (req, res) => {
-  res.json('Get games')
-})
+router.post('/', gamesController.addNewGame)
 
-router.post('/add', (req, res) => {
-  res.json('Add game')
-})
+router.put('/join', gamesController.joinGame)
 
-router.delete('/delete/:id', (req, res) => {
-  const id = req.params.id
-  res.json(`Delete game -> id: ${id}`)
-})
+router.put('/team', gamesController.joinTeam)
 
-router.put('/update/:id', async (req, res) => {
-  const id = req.params.id
-  res.json(`Update game -> id: ${id}`)
-})
+router.put('/start', gamesController.start)
+
+router.put('/end', gamesController.end)
+
+router.put('/update', gamesController.updateGameState)
 
 module.exports = router
