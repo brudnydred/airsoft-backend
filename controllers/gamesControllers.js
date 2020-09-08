@@ -7,7 +7,7 @@ const CHARS = [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789']
 
 module.exports = {
   addNewGame: async (req, res) => {
-    const { userId: hostId, gamePassword, location } = req.body
+    const { userId: hostId, gamePassword, location, isPublic } = req.body
     let hashedGamePassword
     
     const gameCode = [...'xxxxxx'].map(i => i = CHARS[Math.floor(Math.random() * CHARS.length)]).join('')
@@ -20,7 +20,8 @@ module.exports = {
       const newGame = new Game({
         gameCode: gameCode,
         gamePassword: gamePassword ? hashedGamePassword : '',
-        location
+        location,
+        isPublic
       })
 
       const gameId = newGame._id

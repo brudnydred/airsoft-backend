@@ -61,6 +61,10 @@ const gameSchema = new Schema({
   },
   playersIds: {
     type: [],
+  },
+  isPublic: {
+    type: Boolean,
+    required: true
   }
 })
 
