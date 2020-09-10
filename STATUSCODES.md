@@ -1,3 +1,32 @@
+### USERS
+
+| STATUS CODE | OPIS |
+|---|---|
+| US0 | Pobrano użytkowników |
+| US1 | Znaleziono użytkownika |
+| US2 | Zarejestrowano |
+| US3 | Zalogowano |
+| US4 | Wylogowano |
+| US5 | Usunięto konto użytkownika |
+| US6 | Zaktualizowano konto użytkownika |
+| US7 | Dodano przyjaciela |
+| US8 | Usunięto przyjaciela |
+
+| UF0 | Nie znaleziono użytkownika |
+| UF1 | Hasło jest wymagane |
+| UF2 | Nazwa użytkownika / email są zajęte |
+| UF3 | Nazwa użytkownika jest wymagana |
+| UF4 | Nazwa użytkownika jest za krótka |
+| UF5 | Email jest wymagany |
+| UF6 | Nieprawidłowe hasło |
+| UF7 | Brakuje nazwy użtykownika, hasła lub emaila |
+| UF8 | Brakuje id |
+| UF9 | Nie możesz dodać siebie jako przyjaciela |
+| UF10 | Ten użyutkownik jest już Twoim przyjacielem |
+| UF11 | Brakuje id przyjaciela |
+
+| UNH | Błąd nieobsługiwany |
+
 ### GAMES
 
 | STATUS CODE | OPIS |
