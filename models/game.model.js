@@ -8,6 +8,10 @@ const gameSchema = new Schema({
     required: true,
     unique: true
   },
+  gameName: {
+    type: String, 
+    required: true
+  },
   gamePassword: {
     type: String,
     trim: true

@@ -9,9 +9,9 @@ module.exports = {
     try {
       const users = await User.find()
   
-      res.status(200).json(users)
+      res.status(200).json({ success: true, data: users, statusCode: 'US0' })
     } catch (err) {
-      res.status(400).json(`Error: ${err}`)
+      res.status(400).json({ success: false, statusCode: 'UNH', error: err }) 
     }
   },
 
@@ -22,13 +22,13 @@ module.exports = {
       const user = await User.find({ _id: id})
   
       if (!user.length) {
-        res.status(400).json('There is no user with that id')
+        res.status(400).json({ success: false, statusCode: 'UF0' })
         next()
       }
 
-      res.status(200).json(user)
+      res.status(200).json( { success: true, data: user, statusCode: 'US1' })
     } catch (err) {
-      res.status(400).json(`Error: ${err}`)
+      res.status(400).json({ success: false, statusCode: 'UNH', error: err })
     }
   }, 
 
@@ -36,7 +36,7 @@ module.exports = {
     const { username, password, email } = req.body
 
     if (password.length === 0) {
-      return res.status(400).json({ success: false, message: 'Password is required.' })
+      return res.status(400).json({ success: false, statusCode: 'UF1' })
     }
 
     try {
@@ -49,25 +49,25 @@ module.exports = {
       })
       
       await newUser.save()
-      res.status(200).json('User added')
+      res.status(200).json({ success: true, statusCode: 'US2' })
     } catch (err) {
       if (err.name === 'MongoError' && err.code === 11000)  {
-        return res.status(400).json({ success: false, message: "Username or Email is taken."})
+        return res.status(400).json({ success: false, statusCode: 'UF2' })
       }
 
       if (err.errors.username?.kind === 'required') {
-        return res.status(400).json({ success: false, message: "Username is required."})
+        return res.status(400).json({ success: false, statusCode: "UF3" })
       }
   
       if (err.errors.username?.kind === 'minlength') {
-        return res.status(400).json({ success: false, message: "Username is too short."})
+        return res.status(400).json({ success: false, statusCode: "UF4" })
       }
       
       if (err.errors.email?.kind === 'required') {
-        return res.status(400).json({ success: false, message: "Email is required."})
+        return res.status(400).json({ success: false, statusCode: "UF5" })
       }
       
-      res.status(400).json({ success: false, message: `Unhandled error: ${err}`})
+      res.status(400).json({ success: false, statusCode: 'UNH', error: err })
     }
   },
 
@@ -75,33 +75,31 @@ module.exports = {
     const { username, password } = req.body
 
     if (!username.length) {
-      return res.status(400).json({ success: false, message: "Username is required."})
+      return res.status(400).json({ success: false, statusCode: "UF3" })
     }
 
     try {
       const user = await User.findOne({ username: username })
       
       if (user === null) {
-        return res.status(400).json({ success: false, message: 'User not found.'})
+        return res.status(400).json({ success: false, statusCode: 'UF0'})
       }
 
       if (!await bcrypt.compare(password.toString(), user.password.toString())) {
-        res.status(400).json({ success: false, message: "Invalid password"})
+        res.status(400).json({ success: false, statusCode: "UF6"})
         return next()
       }
 
       const token = jwt.sign({ _id: user._id, username: user.username }, process.env.ACCESS_TOKEN_SECRET)
       res.header('auth-token', token)
-      res.status(200).json({ success: true, message: 'Logged in' })
+      res.status(200).json({ success: true, statusCode: 'US3' })
     } catch (err) {
-      res.status(400).json(err)
+      res.status(400).json({ success: false, statusCode: 'UNH', error: err })
     }
   },
 
   signOut: async (req, res) => {
     const { id } = req.params
-
-    console.log(`id: ${id}`)
 
     try {
       await User.updateOne({ _id: id }, {
@@ -109,20 +107,18 @@ module.exports = {
           lastActiveAt: new Date()
         }
       })
-      console.log(`logged out`)
 
-      res.status(200).json('User logged out')
+      res.status(200).json({ success: true, statusCode: 'US4'})
     } catch (err) {
-      console.log(`Error: ${err}`)
-      res.status(400).json(`Error: ${err}`)    
+      res.status(400).json({ success: false, statusCode: 'UNH', error: err })    
     }
   },
 
   delete: async (req, res, next) => {
     const { id } = req.params
-  
+
     if (!id) {
-      res.status(400).json('There is no id')
+      res.status(400).json({ success: false, statusCode: 'UF8' })
       return next()
     }
 
@@ -137,7 +133,7 @@ module.exports = {
       
       res.status(200).json('User deleted')
     } catch (err) {
-      res.status(400).json(`Error: ${err}`)
+      res.status(400).json({ success: false, statusCode: 'UNH', error: err })
     }
   },
 
@@ -146,12 +142,12 @@ module.exports = {
     const { id } = req.params
   
     if (!username || !password || !email) {
-      res.status(400).json('There is no username or password or email')
+      res.status(400).json({ success: false, statusCode: 'UF7' })
       return next()
     }
 
     if (!id) {
-      res.status(400).json('There is no id')
+      res.status(400).json({ success: false, statusCode: 'UF8' })
       return next()
     }
 
@@ -165,9 +161,9 @@ module.exports = {
           email: email
         }
       })
-      res.status(200).json('User updated')
+      res.status(200).json({ success: true, statuCode: 'US6' })
     } catch (err) {
-      res.status(400).json(`Error: ${err}`)    
+      res.status(400).json({ success: false, statuCode: 'UNH', error: err })    
     }
   },
 
@@ -184,19 +180,19 @@ module.exports = {
       }
 
       if (friendData === null) {
-        res.status(400).json('User not found')
+        res.status(400).json({ success: false, statuCode: 'UF0' })
         return next()
       }
 
       if (id.toString() === friendData._id.toString()) {
-        res.status(400).json('You cannot add yourself as friends')
+        res.status(400).json({ success: false, statuCode: 'UF9' })
         return next()
       }
 
       const { friends } = await User.findOne({ _id: id }, 'friends -_id')
 
       if (friends.some(friend => friend.toString() === friendData._id.toString())) {
-        res.status(400).json(`${friendData.username} is already your friend`)
+        res.status(400).json({ success: false, statuCode: 'UF10' })
         return next()
       }
 
@@ -212,9 +208,9 @@ module.exports = {
         }
       })
 
-      res.status(200).json('Friend added!')
+      res.status(200).json({ success: true, statuCode: 'US7'})
     } catch (err) {
-      res.status(400).json(`Error: ${err}`)
+      res.status(400).json({ success: false, statuCode: 'UNH', error: err })
     }
   },
 
@@ -223,7 +219,7 @@ module.exports = {
     const { friendId } = req.body
 
     if (!friendId) {
-      res.status(400).json('There is no friend id')
+      res.status(400).json({ success: false, statuCode: 'UF11' })
       return next()
     }
 
@@ -240,9 +236,9 @@ module.exports = {
         }
       })
   
-      res.status(200).json('Friend removed')
+      res.status(200).json({ success: true, statuCode: 'US8' })
     } catch (err) {
-      res.status(400).json(`Error: ${err}`)
+      res.status(400).json({ success: false, statuCode: 'UNH', error: err })
     }
   }
 }

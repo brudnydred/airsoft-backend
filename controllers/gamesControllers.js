@@ -7,7 +7,7 @@ const CHARS = [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789']
 
 module.exports = {
   addNewGame: async (req, res) => {
-    const { userId: hostId, gamePassword, location, isPublic } = req.body
+    const { userId: hostId, gamePassword, location, isPublic, gameName } = req.body
     let hashedGamePassword
     
     const gameCode = [...'xxxxxx'].map(i => i = CHARS[Math.floor(Math.random() * CHARS.length)]).join('')
@@ -20,6 +20,7 @@ module.exports = {
       const newGame = new Game({
         gameCode: gameCode,
         gamePassword: gamePassword ? hashedGamePassword : '',
+        gameName,
         location,
         isPublic
       })
@@ -37,9 +38,9 @@ module.exports = {
         }
       })
 
-      res.status(200).json({ success: true, message: 'Game added', gameId: gameId, gameCode: gameCode })
+      res.status(200).json({ success: true, statusCode: 'GS0', gameId: gameId, gameCode: gameCode })
     } catch (err) {
-      res.status(400).json({ success: false, message: `Error: ${err}` })
+      res.status(400).json({ success: false, statusCode: 'GF0' })
     }
   },
 
@@ -50,17 +51,17 @@ module.exports = {
       const game = await Game.findOne({ gameCode: gameCode }, 'isFinished gamePassword isRunning numberOfPlayers')
 
       if (game.isRunning) {
-        res.status(400).json({ success: false, message: 'Game is already running'})
+        res.status(400).json({ success: false, statusCode: 'GF1'})
         return
       }
 
       if (game.isFinished) {
-        res.status(400).json({ success: false, message: 'Game is finished'})
+        res.status(400).json({ success: false, statusCode: 'GF2'})
         return
       }
 
       if (gamePassword && !await bcrypt.compare(gamePassword.toString(), game.gamePassword.toString())) {
-        res.status(400).json({ success: false, message: 'Wrong password' })
+        res.status(400).json({ success: false, statusCode: 'GF3' })
         return 
       }
 
@@ -75,9 +76,9 @@ module.exports = {
         }
       })
 
-      res.status(200).json({ success: true, message: 'You joined to the game'})
+      res.status(200).json({ success: true, statusCode: 'GS1'})
     } catch (err) {
-      res.status(400).json(err)
+      res.status(400).json({ success: false, statusCode: 'UNH', error: err })
     }
   },
 
@@ -88,7 +89,7 @@ module.exports = {
       const game = await Game.findOne({ _id: gameId })
       
       if (game.isRunning) {
-        res.status(400).json({ success: false, message: 'Cannot change team during game'})
+        res.status(400).json({ success: false, statusCode: 'GF4' })
         return
       }
 
@@ -99,7 +100,7 @@ module.exports = {
           }
         })
 
-        res.status(200).json({ success: true, message: 'You joined team Blue' })
+        res.status(200).json({ success: true, statusCode: 'GS2' })
         return
       } else {
         await Game.updateOne({ _id: gameId }, {
@@ -108,12 +109,12 @@ module.exports = {
           }
         })
 
-        res.status(200).json({ success: true, message: 'You joined team Red' })
+        res.status(200).json({ success: true, message: 'GS2' })
         return
       }
 
     } catch (err) {
-      res.status(400).json(err)
+      res.status(400).json({ success: false, statusCode: 'UNH', error: err })
     }
   },
 
@@ -127,9 +128,9 @@ module.exports = {
         }
       })
 
-      res.status(200).json({ success: true, message: 'Game started' })
+      res.status(200).json({ success: true, statusCode: 'GS3' })
     } catch (err) {
-      res.status(400).json({ success: false, message: `Error: ${err}`})
+      res.status(400).json({ success: false, statusCode: 'UNH', error: err })
     }
   },
 
@@ -149,9 +150,9 @@ module.exports = {
         }
       })
 
-      res.status(200).json({ success: true, message: 'Game ended' })
+      res.status(200).json({ success: true, statusCode: 'GS4' })
     } catch (err) {
-      res.status(400).json({ success: false, message: `Error: ${err}`})      
+      res.status(400).json({ success: false, statusCode: 'UNH', error: err })      
     }
   },
 
@@ -162,7 +163,7 @@ module.exports = {
       const game = await Game.findOne({ _id: gameId })
 
       if (game.isFinished && !game.isRunning) {
-        res.status(400).json({ success: false, message: 'Game is finished' })
+        res.status(400).json({ success: false, statusCode: 'GF5' })
         return 
       }
 
@@ -174,9 +175,9 @@ module.exports = {
         }
       })
 
-      res.status(200).json({ success: true, message: 'Game updated'})
+      res.status(200).json({ success: true, statusCode: 'GS5' })
     } catch (err) {
-      res.status(400).json({ success: false, message: `Error: ${err}`})            
+      res.status(400).json({ success: false, statusCode: 'UNH', error: err })            
     }
   } 
 }
