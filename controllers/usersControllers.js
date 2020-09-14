@@ -161,9 +161,9 @@ module.exports = {
           email: email
         }
       })
-      res.status(200).json({ success: true, statuCode: 'US6' })
+      res.status(200).json({ success: true, statusCode: 'US6' })
     } catch (err) {
-      res.status(400).json({ success: false, statuCode: 'UNH', error: err })    
+      res.status(400).json({ success: false, statusCode: 'UNH', error: err })    
     }
   },
 
@@ -180,19 +180,19 @@ module.exports = {
       }
 
       if (friendData === null) {
-        res.status(400).json({ success: false, statuCode: 'UF0' })
+        res.status(400).json({ success: false, statusCode: 'UF0' })
         return next()
       }
 
       if (id.toString() === friendData._id.toString()) {
-        res.status(400).json({ success: false, statuCode: 'UF9' })
+        res.status(400).json({ success: false, statusCode: 'UF9' })
         return next()
       }
 
       const { friends } = await User.findOne({ _id: id }, 'friends -_id')
 
       if (friends.some(friend => friend.toString() === friendData._id.toString())) {
-        res.status(400).json({ success: false, statuCode: 'UF10' })
+        res.status(400).json({ success: false, statusCode: 'UF10' })
         return next()
       }
 
@@ -208,9 +208,9 @@ module.exports = {
         }
       })
 
-      res.status(200).json({ success: true, statuCode: 'US7'})
+      res.status(200).json({ success: true, statusCode: 'US7'})
     } catch (err) {
-      res.status(400).json({ success: false, statuCode: 'UNH', error: err })
+      res.status(400).json({ success: false, statusCode: 'UNH', error: err })
     }
   },
 
@@ -219,7 +219,7 @@ module.exports = {
     const { friendId } = req.body
 
     if (!friendId) {
-      res.status(400).json({ success: false, statuCode: 'UF11' })
+      res.status(400).json({ success: false, statusCode: 'UF11' })
       return next()
     }
 
@@ -236,9 +236,9 @@ module.exports = {
         }
       })
   
-      res.status(200).json({ success: true, statuCode: 'US8' })
+      res.status(200).json({ success: true, statusCode: 'US8' })
     } catch (err) {
-      res.status(400).json({ success: false, statuCode: 'UNH', error: err })
+      res.status(400).json({ success: false, statusCode: 'UNH', error: err })
     }
   }
 }
