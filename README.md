@@ -24,7 +24,7 @@ Route `/games`
 
 | ENDPOINT | METODA | PARAMS | BODY | TOKEN |
 |---|---|---|---|---|
-| `/` | POST | brak | `hostId: string`, `gamePassword: string`, `location: string` | tak |
+| `/` | POST | brak | `userId: string`, `gamePassword: string`, `location: string` | tak |
 | `/join` | POST | brak | `userId: string`, `gameCode: string`, `gamePassword: string` | tak |
 | `/team` | PUT | brak | `userId: string`, `team: string`, `gameId: string` | tak |
 | `/start` | PUT | brak | `gameId: string` | tak |
