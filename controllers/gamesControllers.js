@@ -76,7 +76,7 @@ module.exports = {
         }
       })
 
-      res.status(200).json({ success: true, statusCode: 'GS1'})
+      res.status(200).json({ success: true, statusCode: 'GS1', gameId: game._id  })
     } catch (err) {
       res.status(400).json({ success: false, statusCode: 'UNH', error: err })
     }

@@ -3,7 +3,7 @@ const gamesController = require('./../controllers/gamesControllers')
 
 router.post('/', gamesController.addNewGame)
 
-router.put('/join', gamesController.joinGame)
+router.post('/join', gamesController.joinGame)
 
 router.put('/team', gamesController.joinTeam)
 
