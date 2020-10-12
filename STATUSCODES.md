@@ -35,10 +35,16 @@
 | GS3 | Gra rozpoczęta |
 | GS4 | Gra zakończona |
 | GS5 | Zaktualizowano stan gry |
+| GS6 | Pobrano drużyny |
+| GS7 | Pobrano statystyki gry |
+| GS8 | Usunięto grę |
+| GS9 | Ponownie dołączono do gry |
 | GF0 | Gra niedodana |
 | GF1 | Gra trwa, nie można dołączyć |
 | GF2 | Gra zakończona, nie można dołączyć |
 | GF3 | Złe hasło gry |
 | GF4 | Nie można zmienić druży podczas gry |
 | GF5 | Gra zakończona, nie można zaktualizować stanu gry |
+| GF6 | Gra zakończona, nie można ponownie dołączyć |
+| GF7 | Nie znaleziono użytkownika w grze |
 | UNH | Błąd nieobsługiwany |

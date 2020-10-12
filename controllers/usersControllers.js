@@ -5,11 +5,12 @@ const jwt = require('jsonwebtoken')
 const BCRYPT_SALT_ROUNDS = 12
 
 module.exports = {
-  findAll: async (req, res) => {
+  findAll: async (req, res, next) => {
     try {
-      const users = await User.find()
+      const users = await User.find({}, 'username _id')
   
-      res.status(200).json({ success: true, data: users, statusCode: 'US0' })
+      res.locals.users = users
+      next()
     } catch (err) {
       res.status(400).json({ success: false, statusCode: 'UNH', error: err }) 
     }

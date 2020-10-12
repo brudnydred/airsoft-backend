@@ -30,6 +30,10 @@ Route `/games`
 | `/start` | PUT | brak | `gameId: string` | tak |
 | `/end` | PUT | brak | `gameId: string`, `gameTime: number`, `teamRedScores: number`, `teamBlueScores: number` | tak |
 | `/update` | PUT | brak | `gameId: string`, `gameTime: number`, `teamRedScores: number`, `teamBlueScores: number` | tak |
+| `/:gameId/teams` | GET | `gameId: string` | brak | tak |
+| `/:gameId/stats` | GET | `gameId: string` | brak | tak |
+| `/:gameId/reconnect/:userId` | GET | `gameId: string`, `userId: string` | brak | tak |
+| `/:gameId` | DELETE | `gameId: string` | brak | tak |
   
 ## UWAGI
 

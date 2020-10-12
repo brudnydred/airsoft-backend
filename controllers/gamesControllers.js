@@ -1,4 +1,3 @@
-const Games = require('./../models/game.model')
 const bcrypt = require('bcrypt')
 const Game = require('./../models/game.model')
 
@@ -22,7 +21,8 @@ module.exports = {
         gamePassword: gamePassword ? hashedGamePassword : '',
         gameName,
         location,
-        isPublic
+        isPublic,
+        hostId
       })
 
       const gameId = newGame._id
@@ -179,5 +179,74 @@ module.exports = {
     } catch (err) {
       res.status(400).json({ success: false, statusCode: 'UNH', error: err })            
     }
-  } 
+  },
+  
+  getTeams: async (req, res) => {
+    const { gameId } = req.params
+    const { users } = res.locals
+    let teamRedUsernames = [], teamBlueUsernames = []
+
+    try {
+      const { teamRed: teamRedIds, teamBlue: teamBlueIds } = await Game.findOne({ _id: gameId })
+
+      teamRedUsernames = users.filter(({ _id }) => teamRedIds.includes(_id)).map(({ username }) => username )
+      teamBlueUsernames = users.filter(({ _id }) => teamBlueIds.includes(_id)).map(({ username }) => username )
+
+      res.status(200).json({ success: true, statusCode: 'GS6', teamRedUsernames, teamBlueUsernames })
+    } catch (err) {
+      res.status(400).json({ success: false, statusCode: 'UNH', error: err })
+    }
+  },
+
+  getStats: async (req, res) => {
+    const { gameId } = req.params
+
+    try {
+      const { teamBlueScores, teamRedScores, gameTime } = await Game.findOne({ _id: gameId })
+
+      res.status(200).json({ success: true, statusCode: 'GS7', teamBlueScores, teamRedScores, gameTime })
+    } catch (err) {
+      res.status(400).json({ success: false, statusCode: 'UNH', error: err })      
+    }
+  },
+
+  deleteGame: async (req, res) => {
+    const { gameId } = req.params
+
+    try {
+      await Game.deleteOne({ _id: gameId })
+
+      res.status(200).json({ success: true, statusCode: 'GS8' })
+    } catch (err) {
+      res.status(400).json({ success: false, statusCode: 'UNH', error: err })
+    }
+  },
+
+  reconnect: async (req, res, next) => {
+    const { gameId, userId } = req.params
+
+    try {
+      const { isFinished, playersIds, hostId } = await Game.findOne({ _id: gameId })
+
+      if (isFinished) {
+        res.status(400).json({ success: false, statusCode: 'GF6', allowReconnect: false })
+        return next()
+      }
+
+      if (!playersIds.includes(userId)) {
+        res.status(400).json({ success: false, statusCode: 'GF7', allowReconnect: false })
+        return next()
+      } 
+
+      if (userId === hostId) {
+        res.status(200).json({ success: true, statusCode: 'GS9', allowReconnect: true, isHost: true })
+        return next()
+      } 
+        
+      res.status(200).json({ success: true, statusCode: 'GS9', allowReconnect: true, isHost: false })
+      
+    } catch (err) {
+      res.status(400).json({ success: false, statusCode: 'UNH', error: err, allowReconnect: false })      
+    }
+  }
 }

@@ -69,6 +69,10 @@ const gameSchema = new Schema({
   isPublic: {
     type: Boolean,
     required: true
+  },
+  hostId: {
+    type: String,
+    required: true
   }
 })
 

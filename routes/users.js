@@ -2,8 +2,6 @@ const router = require('express').Router()
 const usersController = require('./../controllers/usersControllers')
 const verifyToken = require('./../middlewares/verifyToken')
 
-router.get('/', verifyToken, usersController.findAll)
-
 router.get('/:id', verifyToken, usersController.findOne)
 
 router.post('/signup', usersController.signUp)
