@@ -1,6 +1,6 @@
-## POMOC: 
+## OPIS: 
 
-API działa pod adresem `http://asg-paintball-api.herokuapp.com`
+Backend napisany w Node.js + Express, stworzy pod aplikację mobilną, która wprowadzi tryby z gier takich jak Counter Strike: Global Offensive, Battlefield czy Call of Duty do Airsoft'a i Paintball'a w życiu realnym.
 
 ### USERS
 
