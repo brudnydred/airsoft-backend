@@ -34,10 +34,7 @@ Route `/games`
 | `/:gameId/stats` | GET | `gameId: string` | brak | tak |
 | `/:gameId/reconnect/:userId` | GET | `gameId: string`, `userId: string` | brak | tak |
 | `/:gameId` | DELETE | `gameId: string` | brak | tak |
-  
-## UWAGI
 
-Dla lepszego działania API zaleca się przechowywanie niewrażliwych danych w pamięci cache urządzenia lub przeglądarki.
 
 ## STACK TECHNOLOGICZNY:
 - Node.js + Express.js
